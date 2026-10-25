@@ -292,7 +292,7 @@
   /* STATS BAR */
   .stats-bar{
     display:flex; justify-content:center;
-    max-width: 760px; margin: 0 auto;
+    max-width: 1000px; margin: 0 auto;
     padding: 40px 24px 8px;
     gap: 16px;
   }
@@ -313,8 +313,8 @@
     font-size:0.85rem; color: var(--text-muted);
   }
   @media (max-width: 560px){
-    .stats-bar{ gap:10px; padding:40px 20px; }
-    .stat-box{ padding:20px 10px; }
+    .stats-bar{ gap:10px; padding:40px 20px; flex-wrap: wrap; }
+    .stat-box{ padding:20px 10px; flex: 1 1 calc(50% - 5px); }
   }
 
   /* SECTIONS */
@@ -367,10 +367,10 @@
   }
   .link-card .link-thumb{
     position:absolute; inset:0; width:100%; height:100%;
-    object-fit:cover; filter:brightness(0.55);
+    object-fit:cover; filter:brightness(0.92);
     transition: filter .3s ease;
   }
-  .link-card:hover .link-thumb{ filter:brightness(0.7); }
+  .link-card:hover .link-thumb{ filter:brightness(1); }
   .link-card .link-overlay{
     position:absolute; top:0; right:0; bottom:0; left:0; z-index:1;
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
@@ -379,7 +379,7 @@
   .link-card .play{
     background: var(--accent); color:#04141C; border:none;
     width:46px; height:46px; font-size:1rem;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.45), 0 0 0 1px rgba(0,0,0,0.12);
   }
   .link-card .link-label{
     display: none;
@@ -387,7 +387,8 @@
   .video-caption{
     position:absolute; left:0; right:0; bottom:0; z-index:2;
     padding: 18px 10px 8px;
-    background: linear-gradient(to top, rgba(0,0,0,0.78), transparent);
+    background: linear-gradient(to top, rgba(0,0,0,0.82), rgba(0,0,0,0.35) 60%, transparent);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
     color: #fff;
     font-size: 0.72rem;
     font-weight: 600;
@@ -672,6 +673,49 @@
   .contact-email:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
   footer .foot-note{ margin: 0; }
   footer .contact-sub{ color: #A9B3BA; font-size: 1.02rem; margin: 0 auto 28px; max-width: 44ch; text-wrap: balance; }
+
+  /* WORK — a different layout per format */
+  .phase-head p{ margin: 10px 0 0; color: #A9B3BA; }
+  .work-grid{ margin-top: 26px; }
+  .work-grid .slot{ width:auto; aspect-ratio: 16/9; transform:none; }
+  @media (hover: hover) and (pointer: fine){
+    .work-grid .slot:hover{ transform: translateY(-4px); }
+  }
+
+  /* Short-form: a flat row of vertical cards */
+  .carousel-track.flat{ gap: 18px; padding: 18px 4px 26px; perspective:none; }
+  .carousel-track.flat .slot{ width: 172px; aspect-ratio: 9/16; transform: none; }
+  @media (hover: hover) and (pointer: fine){
+    .carousel-track.flat .slot:hover{ transform: translateY(-6px); }
+  }
+  /* arrows stay above a hovered card */
+  .carousel-arrow{ z-index: 10; }
+
+  /* Long-form: one featured player, the rest beside it */
+  .lf-layout{
+    display:grid; gap: 14px;
+    grid-template-columns: minmax(0, 1.65fr) repeat(2, minmax(0, 0.5fr));
+    grid-auto-rows: auto;
+  }
+  .lf-layout .slot:first-child{ grid-column: 1; grid-row: 1 / span 3; aspect-ratio: auto; min-height: 100%; }
+  .lf-layout .slot:first-child .play{ width: 68px; height: 68px; font-size: 1.4rem; }
+  .lf-layout .slot:first-child .video-caption{ font-size: 1.05rem; padding: 40px 18px 16px; }
+  .lf-layout .slot:not(:first-child) .play{ width: 34px; height: 34px; font-size: 0.75rem; }
+  .lf-layout .slot:not(:first-child) .video-caption{ font-size: 0.68rem; padding: 14px 8px 7px; }
+
+  /* SaaS: a 2x2 grid */
+  .saas-grid{ display:grid; gap: 18px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .saas-grid .play{ width: 56px; height: 56px; font-size: 1.15rem; }
+  .saas-grid .video-caption{ font-size: 0.92rem; padding: 28px 14px 12px; }
+
+  @media (max-width: 760px){
+    .lf-layout{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lf-layout .slot:first-child{ grid-column: 1 / -1; grid-row: auto; aspect-ratio: 16/9; min-height: 0; }
+    .saas-grid{ grid-template-columns: 1fr; gap: 14px; }
+  }
+  @media (max-width: 560px){
+    .carousel-track.flat .slot{ width: 150px; }
+  }
 </style>
 </head>
 <body>
@@ -731,6 +775,10 @@
     <div class="stat-num"><span class="count" data-target="19">0</span>+</div>
     <div class="stat-label">Clients</div>
   </div>
+  <div class="stat-box">
+    <div class="stat-num">$<span class="count" data-target="100">0</span>K+</div>
+    <div class="stat-label">Total sales</div>
+  </div>
 </div>
 
 <section class="phase" id="results">
@@ -767,9 +815,9 @@
           </figcaption>
         </figure>
         <figure class="proof-card">
-          <div class="proof-shot"><img src="assets/img/furniture-showroom-video-at-452k-views.jpg" alt="Furniture showroom video at 452K views" style="object-position:0% 100%" loading="lazy" decoding="async"></div>
+          <div class="proof-shot"><img src="assets/img/furniture-showroom-video-at-452k-views.jpg" alt="Harmony video at 452K views" style="object-position:0% 100%" loading="lazy" decoding="async"></div>
           <figcaption class="proof-body">
-            <div class="proof-who"><span class="proof-name">Furniture showroom</span><span class="proof-kind">Interiors</span></div>
+            <div class="proof-who"><span class="proof-name">Harmony</span><span class="proof-kind">Furniture</span></div>
             <div class="proof-stars" aria-label="Rated 5.0 out of 5"><span aria-hidden="true" style="--r:5">★★★★★</span> 5.0</div>
             <p class="proof-quote">A 452K-view showroom tour, without anyone leaving their phone.</p>
           </figcaption>
@@ -783,9 +831,9 @@
           </figcaption>
         </figure>
         <figure class="proof-card">
-          <div class="proof-shot"><img src="assets/img/youtube-channel-video-at-261k-views.jpg" alt="YouTube channel video at 261K views" style="object-position:0% 100%" loading="lazy" decoding="async"></div>
+          <div class="proof-shot"><img src="assets/img/youtube-channel-video-at-261k-views.jpg" alt="Jushua AI video at 261K views" style="object-position:0% 100%" loading="lazy" decoding="async"></div>
           <figcaption class="proof-body">
-            <div class="proof-who"><span class="proof-name">YouTube channel</span><span class="proof-kind">Long-form</span></div>
+            <div class="proof-who"><span class="proof-name">Jushua AI</span><span class="proof-kind">Long-form</span></div>
             <div class="proof-stars" aria-label="Rated 4.5 out of 5"><span aria-hidden="true" style="--r:4.5">★★★★★</span> 4.5</div>
             <p class="proof-quote">A 28-minute video that pulled 261K views within a month of going live.</p>
           </figcaption>
@@ -803,9 +851,9 @@
           </figcaption>
         </figure>
         <figure class="proof-card">
-          <div class="proof-shot"><img src="assets/img/creator-reel-video-at-74-3k-views.jpg" alt="Creator reel video at 74.3K views" style="object-position:0% 100%" loading="lazy" decoding="async"></div>
+          <div class="proof-shot"><img src="assets/img/creator-reel-video-at-74-3k-views.jpg" alt="Str8 video at 74.3K views" style="object-position:0% 100%" loading="lazy" decoding="async"></div>
           <figcaption class="proof-body">
-            <div class="proof-who"><span class="proof-name">Creator reel</span><span class="proof-kind">Lifestyle</span></div>
+            <div class="proof-who"><span class="proof-name">Str8</span><span class="proof-kind">Lifestyle</span></div>
             <div class="proof-stars" aria-label="Rated 3.5 out of 5"><span aria-hidden="true" style="--r:3.5">★★★★★</span> 3.5</div>
             <p class="proof-quote">74.3K views on a single lifestyle reel.</p>
           </figcaption>
@@ -843,17 +891,18 @@
   <div class="wrap">
     <div class="phase-head reveal">
       <h2>Short-form</h2>
+      <p>Reels and Shorts for real estate agents, brands and creators, cut to stop the scroll.</p>
     </div>
     <div class="carousel reveal">
       <button class="carousel-arrow left" data-target="shortform-track" aria-label="Scroll left">‹</button>
-      <div class="carousel-track vertical" id="shortform-track">
-        <a class="slot filled link-card stagger-item" href="https://youtube.com/shorts/eIcey5wP-p4" data-yt-id="eIcey5wP-p4" data-aspect="short"><img class="link-thumb" src="assets/img/thumb-eIcey5wP-p4.jpg" alt="Short 1" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Full-Time Trading Journey</span><span class="link-label">Short 1</span><span class="ext-note">Watch here</span></div></a>
-        <a class="slot filled link-card stagger-item" href="https://youtube.com/shorts/R7B6dsshVHA" data-yt-id="R7B6dsshVHA" data-aspect="short"><img class="link-thumb" src="assets/img/thumb-R7B6dsshVHA.jpg" alt="Short 2" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Real Estate Footage</span><span class="link-label">Short 2</span><span class="ext-note">Watch here</span></div></a>
-        <a class="slot filled link-card stagger-item" href="https://youtube.com/shorts/FHdG2kILSLs" data-yt-id="FHdG2kILSLs" data-aspect="short"><img class="link-thumb" src="assets/img/thumb-FHdG2kILSLs.jpg" alt="Short 3" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Carbon Diamond Brand</span><span class="link-label">Short 3</span><span class="ext-note">Watch here</span></div></a>
+      <div class="carousel-track vertical flat" id="shortform-track">
         <a class="slot filled link-card stagger-item" href="https://youtube.com/shorts/TlkPpruBDrU" data-yt-id="TlkPpruBDrU" data-aspect="short"><img class="link-thumb" src="assets/img/thumb-TlkPpruBDrU.jpg" alt="Short 4" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Real Estate Market Terms</span><span class="link-label">Short 4</span><span class="ext-note">Watch here</span></div></a>
         <a class="slot filled link-card stagger-item" href="https://youtube.com/shorts/_vXm-1ul3X4" data-yt-id="_vXm-1ul3X4" data-aspect="short"><img class="link-thumb" src="assets/img/thumb-_vXm-1ul3X4.jpg" alt="Short 5" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Real Estate AI Q&amp;A</span><span class="link-label">Short 5</span><span class="ext-note">Watch here</span></div></a>
+        <a class="slot filled link-card stagger-item" href="https://youtube.com/shorts/FHdG2kILSLs" data-yt-id="FHdG2kILSLs" data-aspect="short"><img class="link-thumb" src="assets/img/thumb-FHdG2kILSLs.jpg" alt="Short 3" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Carbon Diamond Brand</span><span class="link-label">Short 3</span><span class="ext-note">Watch here</span></div></a>
+        <a class="slot filled link-card stagger-item" href="https://youtube.com/shorts/eIcey5wP-p4" data-yt-id="eIcey5wP-p4" data-aspect="short"><img class="link-thumb" src="assets/img/thumb-eIcey5wP-p4.jpg" alt="Short 1" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Full-Time Trading Journey</span><span class="link-label">Short 1</span><span class="ext-note">Watch here</span></div></a>
+        <a class="slot filled link-card stagger-item" href="https://youtube.com/shorts/R7B6dsshVHA" data-yt-id="R7B6dsshVHA" data-aspect="short"><img class="link-thumb" src="assets/img/thumb-R7B6dsshVHA.jpg" alt="Short 2" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Real Estate Footage</span><span class="link-label">Short 2</span><span class="ext-note">Watch here</span></div></a>
         <a class="slot filled link-card stagger-item" href="https://youtube.com/shorts/L7kpyyH_sdU" data-yt-id="L7kpyyH_sdU" data-aspect="short"><img class="link-thumb" src="assets/img/thumb-L7kpyyH_sdU.jpg" alt="Short 6" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">TMBT Real Estate</span><span class="link-label">Short 6</span><span class="ext-note">Watch here</span></div></a>
-        <a class="slot filled link-card stagger-item" href="https://youtube.com/shorts/mUpX9S4yURU" data-yt-id="mUpX9S4yURU" data-aspect="short"><img class="link-thumb" src="assets/img/thumb-mUpX9S4yURU.jpg" alt="Video 2" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Mindset Vs Building</span><span class="link-label">Video 2</span><span class="ext-note">Watch here</span></div></a>
+        <a class="slot filled link-card stagger-item" href="https://youtube.com/shorts/mUpX9S4yURU" data-yt-id="mUpX9S4yURU" data-aspect="short"><img class="link-thumb" src="assets/img/thumb-mUpX9S4yURU.jpg" alt="Truth About Editing" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Truth About Editing</span><span class="link-label">Video 2</span><span class="ext-note">Watch here</span></div></a>
       </div>
       <button class="carousel-arrow right" data-target="shortform-track" aria-label="Scroll right">›</button>
       <div class="result-card stagger-item" style="left:3%; top:84%; width:34%; padding-bottom:12.1%; transform:rotate(-3deg); z-index:9;"><img src="assets/img/result-12.jpg" alt="Result 12" loading="lazy" decoding="async"></div>
@@ -866,19 +915,16 @@
   <div class="wrap">
     <div class="phase-head reveal">
       <h2>Long-form</h2>
+      <p>YouTube talking-head and documentary videos.</p>
     </div>
-    <div class="carousel reveal">
-      <button class="carousel-arrow left" data-target="longform-track" aria-label="Scroll left">‹</button>
-      <div class="carousel-track horizontal" id="longform-track">
-        <a class="slot filled link-card stagger-item" href="https://youtu.be/mwNBeJ98QYM" data-yt-id="mwNBeJ98QYM" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-mwNBeJ98QYM.jpg" alt="Retirement" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Retirement Planning Talk</span><span class="link-label">Retirement</span><span class="ext-note">Watch here</span></div></a>
+    <div class="work-grid lf-layout reveal" id="longform-track">
+        <a class="slot filled link-card stagger-item" href="https://youtu.be/ZpaMO8hlodE" data-yt-id="ZpaMO8hlodE" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-ZpaMO8hlodE.jpg" alt="Made $10M from Services" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Made $10M from Services</span><span class="link-label">Selling Services</span><span class="ext-note">Watch here</span></div></a>
         <a class="slot filled link-card stagger-item" href="https://youtu.be/nNw1yntfx5M" data-yt-id="nNw1yntfx5M" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-nNw1yntfx5M.jpg" alt="Producers Intro" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Producer Intro Video</span><span class="link-label">Producers Intro</span><span class="ext-note">Watch here</span></div></a>
-        <a class="slot filled link-card stagger-item" href="https://youtu.be/ZpaMO8hlodE" data-yt-id="ZpaMO8hlodE" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-ZpaMO8hlodE.jpg" alt="Selling Services" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Selling Services Explainer</span><span class="link-label">Selling Services</span><span class="ext-note">Watch here</span></div></a>
+        <a class="slot filled link-card stagger-item" href="https://youtu.be/mwNBeJ98QYM" data-yt-id="mwNBeJ98QYM" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-mwNBeJ98QYM.jpg" alt="Retirement" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Retirement Planning Talk</span><span class="link-label">Retirement</span><span class="ext-note">Watch here</span></div></a>
         <a class="slot filled link-card stagger-item" href="https://youtu.be/GxVbGyQ4xHQ" data-yt-id="GxVbGyQ4xHQ" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-GxVbGyQ4xHQ.jpg" alt="Retirement at 62" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Retirement at 62 Breakdown</span><span class="link-label">Retirement at 62</span><span class="ext-note">Watch here</span></div></a>
         <a class="slot filled link-card stagger-item" href="https://youtu.be/24kVk3RgCio" data-yt-id="24kVk3RgCio" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-24kVk3RgCio.jpg" alt="Business Events" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Business Event Highlights</span><span class="link-label">Business Events</span><span class="ext-note">Watch here</span></div></a>
-        <a class="slot filled link-card stagger-item" href="https://youtu.be/pIClifL_eNc" data-yt-id="pIClifL_eNc" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-pIClifL_eNc.jpg" alt="Fitness Sunnah" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Fitness Sunnah Content</span><span class="link-label">Fitness Sunnah</span><span class="ext-note">Watch here</span></div></a>
-        <a class="slot filled link-card stagger-item" href="https://youtu.be/yLsVw9ZsWns" data-yt-id="yLsVw9ZsWns" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-yLsVw9ZsWns.jpg" alt="Video 1" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Streamer Social Clip</span><span class="link-label">Video 1</span><span class="ext-note">Watch here</span></div></a>
-      </div>
-      <button class="carousel-arrow right" data-target="longform-track" aria-label="Scroll right">›</button>
+        <a class="slot filled link-card stagger-item" href="https://youtu.be/pIClifL_eNc" data-yt-id="pIClifL_eNc" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-pIClifL_eNc.jpg" alt="Focus on Your Goals" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Focus on Your Goals</span><span class="link-label">Fitness Sunnah</span><span class="ext-note">Watch here</span></div></a>
+        <a class="slot filled link-card stagger-item" href="https://youtu.be/yLsVw9ZsWns" data-yt-id="yLsVw9ZsWns" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-yLsVw9ZsWns.jpg" alt="Documentary Content" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Documentary Content</span><span class="link-label">Video 1</span><span class="ext-note">Watch here</span></div></a>
     </div>
   </div>
 </section>
@@ -887,16 +933,13 @@
   <div class="wrap">
     <div class="phase-head reveal">
       <h2>SaaS Explainer Style</h2>
+      <p>Product explainers and launch videos that are easy to understand.</p>
     </div>
-    <div class="carousel reveal">
-      <button class="carousel-arrow left" data-target="saas-track" aria-label="Scroll left">‹</button>
-      <div class="carousel-track horizontal" id="saas-track">
+    <div class="work-grid saas-grid reveal" id="saas-track">
         <a class="slot filled link-card stagger-item" href="https://youtu.be/K_1IAxd8c7U" data-yt-id="K_1IAxd8c7U" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-K_1IAxd8c7U.jpg" alt="What is SaaS" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">SaaS Explained Simply</span><span class="link-label">What is SaaS</span><span class="ext-note">Watch here</span></div></a>
         <a class="slot filled link-card stagger-item" href="https://youtu.be/kyM44SEbySA" data-yt-id="kyM44SEbySA" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-kyM44SEbySA.jpg" alt="Craft SaaS" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Craft SaaS Demo</span><span class="link-label">Craft SaaS</span><span class="ext-note">Watch here</span></div></a>
         <a class="slot filled link-card stagger-item" href="https://youtu.be/5hqBfsa77kc" data-yt-id="5hqBfsa77kc" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-5hqBfsa77kc.jpg" alt="Eleven Labs Intro" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Eleven Labs Intro</span><span class="link-label">Eleven Labs Intro</span><span class="ext-note">Watch here</span></div></a>
         <a class="slot filled link-card stagger-item" href="https://youtu.be/p1hPp96SPLY" data-yt-id="p1hPp96SPLY" data-aspect="long"><img class="link-thumb" src="assets/img/thumb-p1hPp96SPLY.jpg" alt="Otter AI" loading="lazy" decoding="async"><div class="link-overlay"><div class="play">▶</div><span class="video-caption">Otter AI Demo</span><span class="link-label">Otter AI</span><span class="ext-note">Watch here</span></div></a>
-      </div>
-      <button class="carousel-arrow right" data-target="saas-track" aria-label="Scroll right">›</button>
     </div>
   </div>
 </section>
@@ -907,7 +950,7 @@
       <div class="about-content stagger-item">
         <div class="label">About</div>
         <h2>Hi, I'm Sarmad</h2>
-        <p class="about-bio">A full-time video editor with 150+ projects delivered and 3M+ views generated for brands, agents and creators. I specialize in three formats &mdash; SaaS explainer videos, talking-head content, and real estate videos &mdash; and treat each differently: pacing and clarity drive explainers, retention and personality drive talking-head, and story and atmosphere drive real estate work.</p>
+        <p class="about-bio">Views are only half the job. I edit reels, YouTube videos and SaaS explainers that grab attention fast, keep people watching, and turn that attention into enquiries and sales.</p>
       </div>
       <div class="about-details stagger-item">
         <div class="about-row">
@@ -929,7 +972,7 @@
 
         <div class="about-row">
           <span class="about-row-label">Availability</span>
-          <p class="about-row-text">Based in UTC+3, working 40 hrs/week. Turnaround depends on a project's size and complexity &mdash; I'll give you a clear timeline once we scope the work together.</p>
+          <p class="about-row-text">Based in UTC+3, working 40 hrs/week. Turnaround depends on a project's size and complexity, so I'll give you a clear timeline once we scope the work together.</p>
         </div>
       </div>
     </div>
@@ -966,7 +1009,7 @@
   revealEls.forEach(el=>io.observe(el));
 
   // Staggered fade-in for carousel tracks and the results collage
-  const staggerGroups = document.querySelectorAll('.carousel-track, .results-scatter, .about-grid');
+  const staggerGroups = document.querySelectorAll('.carousel-track, .work-grid, .results-scatter, .about-grid');
   const staggerIO = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
